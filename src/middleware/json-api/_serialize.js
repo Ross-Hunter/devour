@@ -2,6 +2,7 @@ const _isPlainObject = require('lodash/isPlainObject')
 const _includes = require('lodash/includes')
 const _map = require('lodash/map')
 const _forOwn = require('lodash/forOwn')
+const _kebabCase = require('lodash/kebabCase')
 
 function collection (modelName, items) {
   return items.map(item => {
@@ -27,7 +28,11 @@ function resource (modelName, item) {
     if (isRelationship(value)) {
       serializeRelationship(key, item[key], value, serializedRelationships)
     } else if (item[key] !== undefined) {
-      serializedAttributes[key] = item[key]
+      let serializedKey = key
+      if (options.kebabCaseKeys) {
+        serializedKey = _kebabCase(key)
+      }
+      serializedAttributes[serializedKey] = item[key]
     }
   })
 

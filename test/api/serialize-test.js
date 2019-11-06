@@ -22,12 +22,16 @@ describe('serialize', () => {
   it('should serialize resource items', () => {
     jsonApi.define('product', {
       title: '',
-      about: ''
+      about: '',
+      snakeCaseKey: ''
+    }, {
+      kebabCaseKeys: true
     })
-    let serializedItem = serialize.resource.call(jsonApi, 'product', {title: 'Hello', about: 'World'})
+    let serializedItem = serialize.resource.call(jsonApi, 'product', {title: 'Hello', about: 'World', snakeCaseKey: 'Should be kebab-cased'})
     expect(serializedItem.type).to.eql('products')
     expect(serializedItem.attributes.title).to.eql('Hello')
     expect(serializedItem.attributes.about).to.eql('World')
+    expect(serializedItem.attributes['snake-case-key']).to.eql('Should be kebab-cased')
   })
 
   it('should serialize hasMany relationships', () => {
